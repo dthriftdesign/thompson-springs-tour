@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Thompson Springs — European Tour 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Cinzel:wght@400;700&family=Orbitron:wght@400;700;900&family=Rye&family=Special+Elite&family=Josefin+Slab:wght@300;400;600;700&family=Share+Tech+Mono&family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+<style>
+/* ═══════════════════════════════
+   DEFAULT THEME — Tour Poster
+   Aged newsprint + burnt sienna
+═══════════════════════════════ */
+:root {
+  --ink: #1c1610;
+  --paper: #f6f1e9;
+  --aged: #e4ddd0;
+  --accent: #b03a1a;
+  --gold: #9a7820;
+  --faded: #7a6a58;
+  --header-bg: #1c1610;
+  --header-fg: #f6f1e9;
+  --header-gold: #d4a832;
+  --header-faded: #a89278;
+  --divider-bg: #241e16;
+  --divider-fg: #d4a832;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  --map-filter: sepia(15%) contrast(1.02);
+  --route-color: #b03a1a;
+  --bg-pattern: none;
+  --badge-radius: 2px;
+  --header-img: none;
+  --header-img-blend: normal;
+  --header-img-opacity: 0;
+}
+
+/* ═══════════════════════════════
+   MATT MODE
+   Augusta green — deep forest
+═══════════════════════════════ */
+[data-theme="matt"] {
+  --ink: #0e1f0e;
+  --paper: #f0f7ec;
+  --aged: #d4e6cc;
+  --accent: #276227;
+  --gold: #7a5a00;
+  --faded: #4a6e40;
+  --header-bg: #0a2410;
+  --header-fg: #ecf7e8;
+  --header-gold: #e8cc50;
+  --header-faded: #80b878;
+  --divider-bg: #0a2410;
+  --divider-fg: #e8cc50;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Inter', sans-serif;
+  --map-filter: none;
+  --route-color: #276227;
+  --bg-pattern: repeating-linear-gradient(45deg, transparent, transparent 32px, rgba(39,98,39,0.025) 32px, rgba(39,98,39,0.025) 33px);
+  --badge-radius: 2px;
+  --header-img: url('https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=1400&q=70&auto=format&fit=crop');
+  --header-img-blend: luminosity;
+  --header-img-opacity: 0.15;
+}
+
+/* ═══════════════════════════════
+   PAT/ERT MODE
+   Jupiter — deep space amber
+═══════════════════════════════ */
+[data-theme="paert"] {
+  --ink: #ede0cc;
+  --paper: #140800;
+  --aged: #261200;
+  --accent: #e07840;
+  --gold: #e8bc60;
+  --faded: #b08858;
+  --header-bg: #0c0400;
+  --header-fg: #f2e6d4;
+  --header-gold: #e8bc60;
+  --header-faded: #b88850;
+  --divider-bg: #1e0e00;
+  --divider-fg: #e8bc60;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Inter', sans-serif;
+  --map-filter: none;
+  --route-color: #e07840;
+  --bg-pattern: radial-gradient(ellipse at 20% 80%, rgba(224,120,64,0.1) 0%, transparent 50%), radial-gradient(ellipse at 80% 15%, rgba(200,100,40,0.06) 0%, transparent 45%);
+  --badge-radius: 3px;
+  --header-img: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg/1280px-Jupiter_and_its_shrunken_Great_Red_Spot.jpg');
+  --header-img-blend: screen;
+  --header-img-opacity: 0.3;
+}
+
+/* ═══════════════════════════════
+   RYAN MODE
+   Denim & whiskey — plaid west
+═══════════════════════════════ */
+[data-theme="ryan"] {
+  --ink: #111a30;
+  --paper: #e8eef8;
+  --aged: #c8d4e8;
+  --accent: #1e40a0;
+  --gold: #8c5800;
+  --faded: #4a5880;
+  --header-bg: #0c1830;
+  --header-fg: #e8eef8;
+  --header-gold: #f0c040;
+  --header-faded: #7a9ecc;
+  --divider-bg: #162040;
+  --divider-fg: #e8eef8;
+  --font-display: 'Rye', cursive;
+  --font-body: 'Inter', sans-serif;
+  --map-filter: none;
+  --route-color: #2255cc;
+  --bg-pattern:
+    repeating-linear-gradient(0deg,   transparent, transparent 20px, rgba(30,64,160,0.04) 20px, rgba(30,64,160,0.04) 21px),
+    repeating-linear-gradient(90deg,  transparent, transparent 20px, rgba(30,64,160,0.04) 20px, rgba(30,64,160,0.04) 21px);
+  --badge-radius: 0;
+  --header-img: url('https://images.unsplash.com/photo-1524781289445-ddf8d5695e71?w=1400&q=70&auto=format&fit=crop');
+  --header-img-blend: luminosity;
+  --header-img-opacity: 0.12;
+}
+
+/* ═══════════════════════════════
+   JAKE MODE
+   Redwood forest — earth & moss
+═══════════════════════════════ */
+[data-theme="jake"] {
+  --ink: #111a0a;
+  --paper: #eef6e8;
+  --aged: #d0e4c0;
+  --accent: #3c6820;
+  --gold: #6a4e10;
+  --faded: #4a6830;
+  --header-bg: #142008;
+  --header-fg: #eaf6e0;
+  --header-gold: #c8b830;
+  --header-faded: #80b060;
+  --divider-bg: #1e3010;
+  --divider-fg: #eaf6e0;
+  --font-display: 'Josefin Slab', serif;
+  --font-body: 'Inter', sans-serif;
+  --map-filter: none;
+  --route-color: #3c6820;
+  --bg-pattern: radial-gradient(circle at 15% 85%, rgba(60,104,32,0.08) 0%, transparent 50%), radial-gradient(circle at 85% 15%, rgba(100,78,16,0.05) 0%, transparent 45%);
+  --badge-radius: 4px;
+  --header-img: url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1400&q=70&auto=format&fit=crop');
+  --header-img-blend: luminosity;
+  --header-img-opacity: 0.18;
+}
+
+/* ═══════════════════════════════
+   DAVID MODE
+   Cyberpunk — neon on void
+═══════════════════════════════ */
+[data-theme="david"] {
+  --ink: #c8f0dc;
+  --paper: #030d05;
+  --aged: #0a1e0e;
+  --accent: #00e87a;
+  --gold: #00ff88;
+  --faded: #5a9870;
+  --header-bg: #010805;
+  --header-fg: #00ff88;
+  --header-gold: #00ff88;
+  --header-faded: #00aa55;
+  --divider-bg: #081408;
+  --divider-fg: #00e87a;
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Share Tech Mono', monospace;
+  --map-filter: none;
+  --route-color: #00ff88;
+  --bg-pattern: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,255,136,0.012) 3px, rgba(0,255,136,0.012) 4px);
+  --badge-radius: 0;
+  --header-img: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=70&auto=format&fit=crop');
+  --header-img-blend: color-dodge;
+  --header-img-opacity: 0.06;
+}
+
+/* ═══════════════════════════════
+   COOK MODE
+   Guitar store back room, midnight
+   50 guitars, tube amp glow, CRT
+═══════════════════════════════ */
+[data-theme="cook"] {
+  --ink: #d8d0c0;
+  --paper: #141210;
+  --aged: #242018;
+  --accent: #c8881a;
+  --gold: #c8881a;
+  --faded: #7a7060;
+  --header-bg: #0c0a08;
+  --header-fg: #e0d8c8;
+  --header-gold: #c8881a;
+  --header-faded: #887860;
+  --divider-bg: #1a1610;
+  --divider-fg: #c8881a;
+  --font-display: 'Teko', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --map-filter: none;
+  --route-color: #c8881a;
+  --bg-pattern: repeating-linear-gradient(
+    0deg, transparent, transparent 40px,
+    rgba(200,136,26,0.018) 40px, rgba(200,136,26,0.018) 41px
+  );
+  --badge-radius: 1px;
+  --header-img: url('https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=1400&q=70&auto=format&fit=crop');
+  --header-img-blend: luminosity;
+  --header-img-opacity: 0.12;
+}
+
+/* Cook-specific overrides */
+[data-theme="cook"] .band-name {
+  font-family: 'Teko', sans-serif;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #e0d8c8;
+}
+[data-theme="cook"] .band-name span { color: #c8881a; }
+[data-theme="cook"] header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg, transparent, transparent 2px,
+      rgba(200,136,26,0.03) 2px, rgba(200,136,26,0.03) 3px
+    );
+}
+[data-theme="cook"] td.date-col { color: #c8881a; }
+[data-theme="cook"] .section-label {
+  font-family: 'Teko', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  font-weight: 600;
+}
+[data-theme="cook"] .song-title {
+  font-family: 'Teko', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #e0d8c8;
+}
+[data-theme="cook"] tr.country-divider td {
+  font-family: 'Teko', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+}
+[data-theme="cook"] thead th {
+  font-family: 'Teko', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+}
+[data-theme="cook"] .tour-dates-header { font-family: 'Teko', sans-serif; letter-spacing: 0.08em; font-size: 1.05rem; }
+[data-theme="cook"] .stat strong { font-family: 'Teko', sans-serif; font-size: 1.3rem; letter-spacing: 0.02em; }
+
+/* ═══════════════════════════════
+   GLOBAL
+═══════════════════════════════ */
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  background: var(--paper);
+  background-image: var(--bg-pattern);
+  color: var(--ink);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* HEADER */
+header {
+  background: var(--header-bg);
+  color: var(--header-fg);
+  padding: 1rem 1.5rem 0.9rem;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  overflow: hidden;
+}
+/* Theme image layer */
+header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--header-img);
+  background-size: cover;
+  background-position: center 30%;
+  opacity: var(--header-img-opacity);
+  mix-blend-mode: var(--header-img-blend);
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+/* Scanline / texture overlays per theme */
+[data-theme="default"] header::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,0.02) 60px,rgba(255,255,255,0.02) 61px); }
+[data-theme="david"] header::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,136,0.04) 3px,rgba(0,255,136,0.04) 4px); }
+[data-theme="paert"] header::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 60% 100%, rgba(224,120,64,0.12) 0%, transparent 60%); }
+
+/* ─── THEME DECORATIONS ─── */
+.theme-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.theme-deco svg, .theme-deco span {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* DEFAULT — vintage poster ink stamps */
+[data-theme="default"] .deco-stamp {
+  opacity: 0.07;
+  fill: #f6f1e9;
+}
+
+/* PAT/ERT — floating cosmos */
+[data-theme="paert"] .deco-planet { animation: float 8s ease-in-out infinite; }
+[data-theme="paert"] .deco-planet:nth-child(2) { animation-delay: -3s; animation-duration: 11s; }
+[data-theme="paert"] .deco-planet:nth-child(3) { animation-delay: -6s; animation-duration: 9s; }
+[data-theme="paert"] .deco-ufo { animation: drift 14s linear infinite; }
+[data-theme="paert"] .deco-ufo:nth-child(5) { animation-delay: -7s; }
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes drift {
+  0% { transform: translateX(-60px); }
+  100% { transform: translateX(calc(100vw + 60px)); }
+}
+@keyframes twinkle {
+  0%,100% { opacity: 0.6; }
+  50% { opacity: 0.15; }
+}
+
+/* RYAN — wanted poster elements */
+[data-theme="ryan"] .deco-star { opacity: 0.12; fill: #f0c040; }
+[data-theme="ryan"] .deco-cactus { opacity: 0.1; fill: #1e40a0; }
+
+/* JAKE — forest silhouettes */
+[data-theme="jake"] .deco-tree { opacity: 0.1; fill: #3c6820; }
+
+/* DAVID — pixel sprites */
+[data-theme="david"] .deco-invader { opacity: 0.25; fill: #00ff88; animation: blink 1.2s step-end infinite; }
+[data-theme="david"] .deco-invader:nth-child(2) { animation-delay: -0.4s; }
+[data-theme="david"] .deco-invader:nth-child(3) { animation-delay: -0.8s; }
+@keyframes blink {
+  0%,100% { opacity: 0.25; }
+  50% { opacity: 0.08; }
+}
+
+/* MATT — golf flag */
+[data-theme="matt"] .deco-flag { opacity: 0.1; fill: #276227; }
+
+/* COOK — schematic grid + components */
+[data-theme="cook"] .deco-schematic { opacity: 0.12; stroke: #c8881a; fill: none; stroke-width: 1; }
+[data-theme="cook"] .deco-schematic-fill { opacity: 0.08; fill: #c8881a; }
+
+/* Body-level decorations for cook (schematic grid) */
+[data-theme="cook"] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(200,136,26,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,136,26,0.04) 1px, transparent 1px),
+    linear-gradient(rgba(200,136,26,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,136,26,0.015) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 20px 20px, 20px 20px;
+}
+[data-theme="cook"] .main-content,
+[data-theme="cook"] .song-view,
+[data-theme="cook"] .theme-bar { position: relative; z-index: 1; }
+
+/* Default body decoration — subtle aged paper grain */
+[data-theme="default"] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+}
+[data-theme="default"] .main-content,
+[data-theme="default"] .song-view { position: relative; z-index: 1; }
+
+/* Ryan bolo tie SVG inline in header */
+[data-theme="ryan"] .bolo { display:inline-block; }
+.bolo { display:none; }
+
+.header-inner {
+  position:relative; z-index:1;
+  max-width:900px; margin:0 auto;
+  display:flex; align-items:flex-end; justify-content:space-between;
+  flex-wrap:wrap; gap:0.75rem;
+}
+.band-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 7vw, 3.5rem);
+  font-weight: 900; line-height: 0.9; letter-spacing: -0.02em;
+  color: var(--header-fg);
+}
+.band-name span { color: var(--header-gold); display: block; }
+[data-theme="paert"] .band-name,
+[data-theme="david"] .band-name { letter-spacing: 0.04em; }
+[data-theme="david"] .band-name { text-shadow: 0 0 18px rgba(0,255,136,0.5); }
+[data-theme="paert"] .band-name { text-shadow: 0 0 24px rgba(232,133,74,0.4); }
+
+.tour-meta { text-align:right; }
+.tour-label { font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--header-faded); margin-bottom:0.2rem; font-family:var(--font-body); font-weight:500; }
+.tour-dates-header { font-family:var(--font-display); font-size:0.95rem; color:var(--header-gold); }
+.tour-stats {
+  display:flex; gap:1.25rem; flex-wrap:wrap;
+  margin-top:0.75rem; padding-top:0.75rem;
+  border-top:1px solid rgba(255,255,255,0.08);
+  font-size:0.56rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--header-faded); width:100%; font-weight:500;
+}
+.stat strong { display:block; font-size:1.05rem; font-family:var(--font-display); color:var(--header-fg); letter-spacing:0; text-transform:none; line-height:1.1; }
+
+/* THEME BAR */
+.theme-bar { background:var(--paper); border-bottom:1px solid var(--aged); position:sticky; top:0; z-index:1000; box-shadow:0 1px 0 rgba(0,0,0,0.04); isolation:isolate; }
+.theme-bar-inner { max-width:900px; margin:0 auto; padding:0 1rem; display:flex; justify-content:flex-end; align-items:center; height:36px; position:relative; }
+.theme-trigger {
+  background:none; border:none; cursor:pointer;
+  color:var(--faded); padding:0.25rem 0.5rem;
+  display:flex; align-items:center; gap:0.4rem;
+  font-family:var(--font-body); font-size:0.72rem;
+  letter-spacing:0.08em; text-transform:uppercase;
+  transition:color 0.2s; font-weight:600;
+}
+.theme-trigger:hover { color:var(--accent); }
+.theme-dropdown {
+  display:none;
+  position:fixed;
+  background:var(--header-bg); border:1px solid var(--accent);
+  z-index:9999; min-width:230px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2);
+  border-radius:2px;
+}
+.theme-dropdown-label { font-size:0.55rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--header-faded); padding:0.5rem 0.75rem 0.25rem; font-family:var(--font-body); border-bottom:1px solid rgba(255,255,255,0.06); }
+.theme-option {
+  display:flex; align-items:center; gap:0.6rem;
+  padding:0.55rem 0.75rem; cursor:pointer;
+  color:var(--header-fg); font-family:var(--font-body); font-size:0.72rem;
+  border:none; background:none; width:100%; text-align:left; transition:background 0.15s;
+}
+.theme-option:hover { background:rgba(255,255,255,0.07); }
+.theme-option.active { color:var(--header-gold); }
+.theme-option .swatch { width:10px; height:10px; border-radius:50%; border:1px solid rgba(255,255,255,0.2); flex-shrink:0; }
+
+/* Desktop: unstick header/themebar — only map sticks */
+@media(min-width:681px) {
+  header { position: relative; }
+  .theme-bar { position: relative; }
+}
+
+/* LAYOUT */
+.main-content { max-width:900px; margin:0 auto; padding:1.25rem 1rem 3rem; display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:start; }
+@media(max-width:680px) {
+  .main-content { grid-template-columns:1fr; gap:0; padding:0; }
+  .tour-meta { display:none !important; }
+  .tour-stats { display:none !important; }
+  .map-wrapper { padding:0; background:var(--paper); }
+  .table-col { padding:0 0.75rem 2rem; }
+}
+
+.section-label { font-size:0.62rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--faded); margin-bottom:0.7rem; padding-bottom:0.45rem; border-bottom:1px solid var(--aged); font-family:var(--font-body); font-weight:600; }
+
+/* MAP */
+.map-wrapper { position:sticky; top:1rem; }
+#tour-map { width:100%; height:460px; border:1px solid var(--aged); border-radius:2px; }
+@media(max-width:680px) { #tour-map{height:220px;} }
+@media(max-width:680px) {
+  /* Ultra compact header — single line */
+  header {
+    padding: 0.3rem 0.85rem 0.28rem;
+  }
+  header::after { display: none; }
+  header::before { display: none; }
+  .theme-deco { display: none; }
+
+  /* Single-line layout: band name left, stats pill right */
+  .header-inner {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .band-name {
+    font-size: clamp(0.95rem, 5.5vw, 1.3rem) !important;
+    line-height: 1 !important;
+    white-space: nowrap;
+  }
+  .band-name span { display: inline !important; }
+  .tour-label { display: none; }
+  .tour-meta { display: none !important; }
+  .tour-stats { display: none !important; }
+
+  /* Inline stats pill */
+  .mobile-stats {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    margin-left: auto;
+    background: rgba(255,255,255,0.07);
+    border-radius: 3px;
+    padding: 0.18rem 0.5rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    white-space: nowrap;
+  }
+  .mobile-stat {
+    font-size: 0.6rem !important;
+    white-space: nowrap;
+  }
+  .mobile-stat strong {
+    font-size: 0.72rem !important;
+  }
+  /* Separator dots between stats */
+  .mobile-stat:not(:last-child)::after {
+    content: '·';
+    margin-left: 0.5rem;
+    opacity: 0.4;
+  }
+
+  /* Stack everything single column, no grid gap */
+  .main-content { display: block; padding: 0; }
+
+  /* Map sticks below header+themebar — solid bg blocks content scrolling behind */
+  .map-wrapper {
+    position: sticky;
+    top: var(--sticky-offset, 80px);
+    z-index: 15;
+    background: var(--paper);
+    padding: 0;
+    box-shadow: 0 4px 0 0 var(--paper), 0 5px 0 0 var(--aged);
+  }
+  .map-wrapper .section-label { display: none; }
+  #tour-map { border-left: none; border-right: none; border-top: none; }
+  .map-note { padding: 0.18rem 0.75rem; font-size: 0.52rem; }
+
+  /* Schedule scrolls freely */
+  .table-col { padding: 0.75rem 0.75rem 2rem; }
+  .table-wrapper { max-height: none; border-left: none; border-right: none; }
+}
+.map-note { font-size:0.6rem; color:var(--faded); margin-top:0.5rem; letter-spacing:0.03em; font-family:var(--font-body); opacity:0.65; }
+
+/* TABLE */
+.table-wrapper { max-height:500px; overflow-y:auto; border:1px solid var(--aged); }
+@media(max-width:680px) { .table-wrapper{max-height:none; border-left:none; border-right:none;} }
+.table-wrapper::-webkit-scrollbar{width:4px;} .table-wrapper::-webkit-scrollbar-track{background:transparent;} .table-wrapper::-webkit-scrollbar-thumb{background:var(--aged);border-radius:2px;} .table-wrapper::-webkit-scrollbar-thumb:hover{background:var(--faded);}
+table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+thead tr { background:var(--header-bg); color:var(--header-fg); position:sticky; top:0; z-index:1; }
+thead th { padding:0.5rem 0.65rem; text-align:left; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; font-size:0.68rem; font-family:var(--font-body); }
+tbody tr { border-bottom:1px solid var(--aged); transition:background 0.12s; }
+tbody tr:hover { background:var(--aged); }
+tbody tr.has-location:hover { background: color-mix(in srgb, var(--accent) 12%, var(--paper)); }
+tbody tr.row-active { background: color-mix(in srgb, var(--accent) 18%, var(--paper)) !important; outline: 2px solid var(--accent); outline-offset: -2px; }
+tbody tr.row-active td.date-col { color: var(--accent); }
+tbody tr.off-day { opacity:0.55; }
+tbody tr.travel-day { background:rgba(0,0,0,0.03); }
+tbody tr.studio-day { background:color-mix(in srgb, var(--gold) 8%, transparent); }
+td { padding:0.45rem 0.65rem; vertical-align:middle; line-height:1.5; font-family:var(--font-body); font-size:0.82rem; }
+td.date-col { white-space:nowrap; font-weight:700; color:var(--accent); font-size:0.78rem; letter-spacing:0.02em; }
+td.loc-col { font-weight:600; font-size:0.82rem; }
+td.venue-col { color:var(--faded); font-weight:400; font-size:0.78rem; }
+td.venue-col a { color:var(--faded); text-decoration:none; border-bottom:1px dotted currentColor; transition:color 0.15s; }
+td.venue-col a:hover { color:var(--accent); }
+.badge { display:inline-block; font-size:0.56rem; padding:0.1rem 0.3rem; letter-spacing:0.08em; text-transform:uppercase; border:1px solid currentColor; vertical-align:middle; margin-left:0.3rem; border-radius:var(--badge-radius); font-family:var(--font-body); font-weight:600; opacity:0.8; }
+.badge.off { color:var(--faded); }
+.badge.travel { color:var(--accent); border-color:var(--accent); }
+.badge.studio { color:var(--gold); border-color:var(--gold); }
+tr.country-divider td { background:var(--divider-bg); color:var(--divider-fg); font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; padding:0.38rem 0.65rem; font-family:var(--font-body); font-weight:600; border-top:2px solid var(--accent); }
+tr.country-divider:first-child td { border-top:none; }
+
+/* David glow */
+[data-theme="david"] thead tr { border-bottom:1px solid var(--accent); }
+[data-theme="david"] td.venue-col a { text-shadow:0 0 6px rgba(0,255,136,0.2); }
+[data-theme="david"] .band-name { color: #00ff88; }
+[data-theme="david"] td.date-col { color: #00e87a; }
+[data-theme="david"] td.loc-col { color: #c8f0dc; }
+[data-theme="david"] .section-label { color: #00aa55; }
+[data-theme="david"] .song-title { color: #00ff88; }
+
+/* Leaflet popups */
+.leaflet-popup-content-wrapper { background:var(--header-bg) !important; color:var(--header-fg) !important; border-radius:var(--badge-radius) !important; font-family:var(--font-body) !important; font-size:0.7rem !important; border:1px solid var(--accent) !important; box-shadow:4px 4px 0 rgba(0,0,0,0.4) !important; }
+.leaflet-popup-tip { background:var(--header-bg) !important; }
+.popup-date { color:var(--header-gold); font-size:0.62rem; margin-bottom:0.15rem; }
+.popup-venue { font-weight:500; margin-bottom:0.1rem; }
+.popup-venue a { color:var(--header-fg); text-decoration:none; border-bottom:1px dotted rgba(255,255,255,0.3); }
+.popup-venue a:hover { color:var(--header-gold); }
+.popup-city { color:var(--header-faded); font-size:0.62rem; }
+
+/* VIEW TOGGLE */
+.view-btn { border-bottom: 2px solid transparent; padding-bottom: 0.15rem; border-radius: 0; }
+.view-btn.active-view { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+.view-btn:not(.active-view):hover { color: var(--ink); border-bottom-color: var(--aged); }
+.song-view { display: none; max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+.song-view.visible { display: block; }
+.song-grid { columns: 2; column-gap: 1.5rem; }
+@media(max-width:600px) { .song-grid { columns: 1; } }
+.song-item {
+  break-inside: avoid;
+  border-bottom: 1px solid var(--aged);
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  transition: background 0.12s;
+}
+.song-title { font-family: var(--font-display); font-size: 1rem; color: var(--ink); font-weight: 700; line-height: 1.25; }
+.song-notes { font-family: var(--font-body); font-size: 0.72rem; color: var(--faded); letter-spacing: 0.01em; font-style: italic; font-weight: 400; }
+.song-num { font-family: var(--font-body); font-size: 0.65rem; color: var(--faded); margin-right: 0.35rem; font-weight: 500; opacity: 0.7; }
+.song-links { display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.25rem; }
+.song-yt { font-family:var(--font-body); font-size:0.62rem; color:var(--accent); text-decoration:none; border-bottom:1px dotted var(--accent); transition:opacity 0.15s; font-weight:600; white-space:nowrap; }
+.song-yt:hover { opacity:0.7; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="theme-deco" id="theme-deco"></div>
+  <div class="header-inner">
+    <div>
+      <div class="tour-label">Chicago, IL</div>
+      <div class="band-name">Thompson<span>Springs</span>
+        <!-- Ryan bolo tie SVG -->
+        <span class="bolo" title="Bolo tie" style="font-size:1.2rem;vertical-align:middle;margin-left:0.5rem;">🤠</span>
+      </div>
+    </div>
+    <div class="mobile-stats">
+      <div class="mobile-stat"><strong>20</strong> Shows</div>
+      <div class="mobile-stat"><strong>7</strong> Countries</div>
+      <div class="mobile-stat"><strong>31</strong> Days</div>
+      <div class="mobile-stat"><strong>ORD→AMS</strong></div>
+    </div>
+    <div class="tour-meta">
+      <div class="tour-label">Tour</div>
+      <div class="tour-dates-header">European Run 2026</div>
+      <div class="tour-dates-header" style="opacity:0.7;font-size:0.8rem;">Mar 20 — Apr 20</div>
+    </div>
+    <div class="tour-stats">
+      <div class="stat"><strong>20</strong> Shows</div>
+      <div class="stat"><strong>7</strong> Countries</div>
+      <div class="stat"><strong>31</strong> Days</div>
+      <div class="stat"><strong>ORD → AMS</strong> Depart</div>
+    </div>
+  </div>
+</header>
+
+<div class="theme-bar">
+  <div class="theme-bar-inner">
+    <div style="display:flex;gap:0.25rem;align-items:center;margin-right:auto;">
+      <button class="theme-trigger view-btn active-view" id="btn-tour">📍 Tour</button>
+      <button class="theme-trigger view-btn" id="btn-songs">🎵 Songs</button>
+    </div>
+    <button class="theme-trigger" id="theme-btn">⋯ Theme</button>
+
+  </div>
+</div>
+
+<div class="main-content">
+  <div class="map-wrapper">
+    <div class="section-label">Tour Route</div>
+    <div id="tour-map"></div>
+    <div class="map-note">Tap a row to highlight · Tap a marker for details</div>
+  </div>
+  <div class="table-col">
+    <div class="section-label">Full Itinerary</div>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Date</th><th>Location</th><th>Venue</th></tr></thead>
+        <tbody id="schedule-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- SONG LIST VIEW -->
+<div class="song-view" id="song-view" style="display:none;">
+  <div class="section-label" style="max-width:900px;margin:0 auto 0.75rem;">Set List — Thompson Springs European Tour 2026</div>
+  <div class="song-grid" id="song-grid"></div>
+</div>
+
+<script>
+const shows = [
+  {date:"3/20",day:"Fri",location:"Chicago, IL",       venue:"Depart ORD 10:45PM",        type:"travel",lat:null,  lng:null,   url:null},
+  {date:"3/21",day:"Sat",location:"Amsterdam, NL",     venue:"Arrive AMS 3:15PM",          type:"travel",lat:null,  lng:null,   url:null},
+  {date:"3/22",day:"Sun",location:"Ossenisse, NL",     venue:"'t Schallemaaj",             type:"show",  lat:51.389,lng:3.981,  url:"http://www.schallemaaj.nl/"},
+  {date:"3/23",day:"Mon",location:"Groningen, NL",     venue:"SPOT w/ GA-20",              type:"show",  lat:53.219,lng:6.567,  url:"http://www.spotgroningen.nl/"},
+  {date:"3/24",day:"Tue",location:"Groningen, NL",     venue:"TV Taping",                  type:"show",  lat:53.230,lng:6.580,  url:null},
+  {date:"3/25",day:"Wed",location:"TBA",               venue:"Off Day",                    type:"off",   lat:null,  lng:null,   url:null},
+  {date:"3/26",day:"Thu",location:"Hengelo, NL",       venue:"Metropool w/ GA-20",         type:"show",  lat:52.261,lng:6.794,  url:"http://www.metropool.nl/"},
+  {date:"3/27",day:"Fri",location:"Drensteinfurt, DE", venue:"Alte Dorschanke",            type:"show",  lat:51.846,lng:7.684,  url:null},
+  {date:"3/28",day:"Sat",location:"Rees, DE",          venue:"Buena Ressa Music Club",     type:"show",  lat:51.775,lng:6.402,  url:"http://buenaressa.de/"},
+  {date:"3/29",day:"Sun",location:"Liège, BE",         venue:"Lou's Bar",                  type:"show",  lat:50.646,lng:5.578,  url:"https://www.facebook.com/lousbarliege/"},
+  {date:"3/30",day:"Mon",location:"TBA",               venue:"Off Day",                    type:"off",   lat:null,  lng:null,   url:null},
+  {date:"3/31",day:"Tue",location:"Erftstadt, DE",     venue:"Theatre Szene",              type:"show",  lat:50.814,lng:6.817,  url:"http://szene93.de/"},
+  {date:"4/1", day:"Wed",location:"Grevenbroich, DE",  venue:"Kultus Cafe",               type:"show",  lat:51.089,lng:6.590,  url:"http://www.kja-duesseldorf.de/kultus"},
+  {date:"4/2", day:"Thu",location:"Luxembourg City",   venue:"Liquid Bar",                type:"show",  lat:49.609,lng:6.136,  url:"http://liquidbar.lu/"},
+  {date:"4/3", day:"Fri",location:"Karlovy Vary, CZ",  venue:"Slash",                     type:"show",  lat:50.238,lng:12.878, url:"https://www.slash-bar.cz/"},
+  {date:"4/4", day:"Sat",location:"Teplice, CZ",       venue:"Tep Jazz Club",             type:"show",  lat:50.637,lng:13.825, url:"http://www.tepjazz.cz/"},
+  {date:"4/5", day:"Sun",location:"TBA",               venue:"Off Day",                   type:"off",   lat:null,  lng:null,   url:null},
+  {date:"4/6", day:"Mon",location:"Prague, CZ",        venue:"Off Day / Recording Studio",type:"studio",lat:50.070,lng:14.411, url:null},
+  {date:"4/7", day:"Tue",location:"Prague, CZ",        venue:"Dílna",                     type:"show",  lat:50.080,lng:14.420, url:"https://www.kafevdilne.cz/"},
+  {date:"4/8", day:"Wed",location:"Milevsko, CZ",      venue:"Galerie M",                 type:"show",  lat:49.451,lng:14.360, url:"https://www.galeriem.cz/"},
+  {date:"4/9", day:"Thu",location:"Arnstadt, DE",      venue:"Rockkneippe 'Jungfer'",     type:"show",  lat:50.831,lng:10.936, url:"http://www.rockjungfer.de/"},
+  {date:"4/10",day:"Fri",location:"Lenzen, DE",        venue:"Raum Cafe",                 type:"show",  lat:53.109,lng:11.380, url:null},
+  {date:"4/11",day:"Sat",location:"Copenhagen, DK",    venue:"Råhuset",                   type:"show",  lat:55.670,lng:12.560, url:"https://onkeldannysplads.kk.dk/raahuset"},
+  {date:"4/12",day:"Sun",location:"Copenhagen, DK",    venue:"Off Day",                   type:"off",   lat:null,  lng:null,   url:null},
+  {date:"4/13",day:"Mon",location:"→ Spain",           venue:"Flight 3:15PM → 6:10PM",    type:"travel",lat:null,  lng:null,   url:null},
+  {date:"4/14",day:"Tue",location:"Valencia, ES",      venue:"16 Toneladas",              type:"show",  lat:39.482,lng:-0.388, url:"http://www.16toneladas.com/"},
+  {date:"4/15",day:"Wed",location:"Zaragoza, ES",      venue:"La Lata de Bombillas",      type:"show",  lat:41.655,lng:-0.879, url:"https://lalatadebombillas.es/"},
+  {date:"4/16",day:"Thu",location:"Logroño, ES",       venue:"Stereo Rockandroll Bar",    type:"show",  lat:42.467,lng:-2.448, url:"http://stereo-bar.es/"},
+  {date:"4/17",day:"Fri",location:"TBA",               venue:"Off Day",                   type:"off",   lat:null,  lng:null,   url:null},
+  {date:"4/18",day:"Sat",location:"Barcelona, ES",     venue:"Alum Club",                 type:"show",  lat:41.390,lng:2.174,  url:null},
+  {date:"4/19",day:"Sun",location:"TBA",               venue:"Off Day",                   type:"off",   lat:null,  lng:null,   url:null},
+  {date:"4/20",day:"Mon",location:"→ Chicago",         venue:"Fly Home 10:30AM → 1:30PM", type:"travel",lat:null,  lng:null,   url:null},
+];
+
+const countryGroups = [
+  {before:"3/22",label:"Netherlands · Belgium · Germany · Luxembourg"},
+  {before:"4/3", label:"Czech Republic"},
+  {before:"4/9", label:"Germany (continued)"},
+  {before:"4/11",label:"Denmark"},
+  {before:"4/14",label:"Spain"},
+];
+
+// BUILD TABLE
+const tbody = document.getElementById('schedule-body');
+let tableRows = [];
+shows.forEach((s,si) => {
+  const div = countryGroups.find(g => g.before === s.date);
+  if (div) { const dr=document.createElement('tr'); dr.className='country-divider'; dr.innerHTML='<td colspan="3">'+div.label+'</td>'; tbody.appendChild(dr); }
+  const tr = document.createElement('tr');
+  if (s.type==='off')    tr.classList.add('off-day');
+  if (s.type==='travel') tr.classList.add('travel-day');
+  if (s.type==='studio') tr.classList.add('studio-day');
+  if (s.lat) tr.classList.add('has-location');
+  let badge = '';
+  if (s.type==='off')    badge='<span class="badge off">Off</span>';
+  if (s.type==='travel') badge='<span class="badge travel">Travel</span>';
+  if (s.type==='studio') badge='<span class="badge studio">Studio</span>';
+  const venueDisplay = s.url ? '<a href="'+s.url+'" target="_blank" rel="noopener">'+s.venue+'</a>' : s.venue;
+  tr.innerHTML='<td class="date-col">'+s.date+' <span style="color:var(--faded);font-size:0.6rem;font-weight:400">'+s.day+'</span></td><td class="loc-col">'+s.location+'</td><td class="venue-col">'+venueDisplay+badge+'</td>';
+  // Row click: highlight map marker
+  if (s.lat) {
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') return; // don't interfere with venue links
+      // Reset previous
+      tableRows.forEach(r => r.classList.remove('row-active'));
+      if (activeMarker) {
+        const theme = document.documentElement.getAttribute('data-theme') || 'default';
+        activeMarker.marker.setIcon(makeIcon(markerFills[theme],'#ffffff',13,themeEmoji[theme]));
+        activeMarker = null;
+      }
+      // Find matching marker
+      const match = markers.find(m => m.s === s);
+      if (match) {
+        const theme = document.documentElement.getAttribute('data-theme') || 'default';
+        match.marker.setIcon(makeHighlightIcon(markerFills[theme],'#ffffff',themeEmoji[theme]));
+        match.marker.openPopup();
+        map.panTo([s.lat, s.lng], {animate: true, duration: 0.5});
+        activeMarker = match;
+        tr.classList.add('row-active');
+      }
+    });
+  }
+  tableRows.push(tr);
+  tbody.appendChild(tr);
+});
+
+// BUILD MAP — all config declared first, then map init
+const tileUrls={
+  default:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  matt:   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  paert:  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  ryan:   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  jake:   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  david:  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  cook:   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+};
+const routeColors={default:'#ff6644',matt:'#44dd44',paert:'#ffaa44',ryan:'#4488ff',jake:'#66cc44',david:'#00ff88',cook:'#c8881a'};
+const markerFills={default:'#ff4444',matt:'#44ee44',paert:'#ffaa44',ryan:'#4488ff',jake:'#66cc44',david:'#00ff88',cook:'#c8881a'};
+const themeEmoji={default:null,matt:'⛳',paert:'🪐',ryan:'🍵',jake:'🪘',david:'🎧',cook:'🎸'};
+
+function makeIcon(color, border, size, emoji) {
+  if (emoji) {
+    const s = 22;
+    return L.divIcon({className:'',
+      html:'<div style="width:'+s+'px;height:'+s+'px;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.7));user-select:none;">'+emoji+'</div>',
+      iconSize:[s,s],iconAnchor:[s/2,s/2]});
+  }
+  size = size || 13;
+  const half = size/2;
+  return L.divIcon({className:'',html:'<div style="width:'+size+'px;height:'+size+'px;background:'+color+';border:2.5px solid '+border+';border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.15)"></div>',iconSize:[size,size],iconAnchor:[half,half]});
+}
+
+function makeHighlightIcon(color, border, emoji) {
+  if (emoji) {
+    return L.divIcon({className:'',
+      html:'<div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;filter:drop-shadow(0 0 6px '+color+') drop-shadow(0 2px 4px rgba(0,0,0,0.8));user-select:none;">'+emoji+'</div>',
+      iconSize:[28,28],iconAnchor:[14,14]});
+  }
+  return L.divIcon({className:'',html:'<div style="width:20px;height:20px;background:'+color+';border:3px solid #fff;border-radius:50%;box-shadow:0 0 12px '+color+',0 0 0 2px rgba(255,255,255,0.5)"></div>',iconSize:[20,20],iconAnchor:[10,10]});
+}
+
+const map = L.map('tour-map',{zoomControl:true,scrollWheelZoom:false});
+const tileLayer = L.tileLayer(tileUrls.default,{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(map);
+
+const coords=[], markers=[];
+let activeMarker = null;
+shows.filter(s=>s.lat).forEach(s=>{
+  const theme0=document.documentElement.getAttribute('data-theme')||'default';
+  const marker=L.marker([s.lat,s.lng],{icon:makeIcon(markerFills[theme0],'#ffffff',13,themeEmoji[theme0])}).addTo(map);
+  const vl=s.url?'<a href="'+s.url+'" target="_blank" rel="noopener">'+s.venue+'</a>':s.venue;
+  marker.bindPopup('<div class="popup-date">'+s.date+' · '+s.day+'</div><div class="popup-venue">'+vl+'</div><div class="popup-city">'+s.location+'</div>');
+  coords.push([s.lat,s.lng]);
+  markers.push({marker,s});
+});
+
+const routeLine=L.polyline(coords,{color:routeColors.default,weight:2.5,opacity:0.8}).addTo(map);
+if(coords.length) map.fitBounds(coords,{padding:[28,28]});
+const mapFilters={
+  default:'',
+  matt:'',
+  paert:'',
+  ryan:'',
+  jake:'',
+  david:'',
+  cook:'',
+};
+
+let currentTile=tileLayer;
+const mapEl=document.getElementById('tour-map');
+const themeBtn=document.getElementById('theme-btn');
+// Create dropdown and append to body (avoids stacking context issues)
+const themeDropdown = document.createElement('div');
+themeDropdown.className = 'theme-dropdown';
+themeDropdown.id = 'theme-dropdown';
+themeDropdown.innerHTML = `
+  <div class="theme-dropdown-label">Choose your vibe</div>
+  <button class="theme-option active" data-theme="default"><span class="swatch" style="background:#c0392b"></span> Default</button>
+  <button class="theme-option" data-theme="matt"><span class="swatch" style="background:#1a5c1a"></span> Matt</button>
+  <button class="theme-option" data-theme="paert"><span class="swatch" style="background:#e8824a"></span> Pat / Ert</button>
+  <button class="theme-option" data-theme="ryan"><span class="swatch" style="background:#1e3f88"></span> Ryan</button>
+  <button class="theme-option" data-theme="jake"><span class="swatch" style="background:#3a6018"></span> Jake</button>
+  <button class="theme-option" data-theme="david"><span class="swatch" style="background:#00ff88"></span> David</button>
+  <button class="theme-option" data-theme="cook"><span class="swatch" style="background:#c8881a"></span> Cook</button>
+`;
+document.body.appendChild(themeDropdown);
+const themeOptions=document.querySelectorAll('.theme-option');
+let dropdownOpen=false;
+
+themeBtn.addEventListener('click',(e)=>{
+  e.stopPropagation();
+  dropdownOpen=!dropdownOpen;
+  if(dropdownOpen){
+    const rect=themeBtn.getBoundingClientRect();
+    themeDropdown.style.display='block';
+    const ddW=themeDropdown.offsetWidth;
+    themeDropdown.style.top=(rect.bottom+4)+'px';
+    themeDropdown.style.left=Math.max(4,rect.right-ddW)+'px';
+  } else {
+    themeDropdown.style.display='none';
+  }
+});
+document.addEventListener('click',(e)=>{
+  if(!themeDropdown.contains(e.target)&&e.target!==themeBtn){
+    dropdownOpen=false;
+    themeDropdown.style.display='none';
+  }
+});
+
+themeOptions.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const theme=btn.dataset.theme;
+    document.documentElement.setAttribute('data-theme',theme);
+    themeOptions.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    map.removeLayer(currentTile);
+    currentTile=L.tileLayer(tileUrls[theme],{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(map);
+    routeLine.setStyle({color:routeColors[theme],weight:2.5,opacity:0.8});
+    mapEl.style.filter=mapFilters[theme];
+    const mf=markerFills[theme];
+    const em=themeEmoji[theme];
+    markers.forEach(({marker,s})=>{
+      if(activeMarker && activeMarker.s===s) {
+        marker.setIcon(makeHighlightIcon(mf,'#ffffff',em));
+      } else {
+        marker.setIcon(makeIcon(mf,'#ffffff',13,em));
+      }
+    });
+    dropdownOpen=false;
+    themeDropdown.style.display='none';
+  });
+});
+</script>
+
+<script>
+// ── SONGS ─────────────────────────────────────────────
+const songs = [
+  {title:"All I Wanna Do",           notes:""},
+  {title:"Baby What You Want Me to Do", notes:""},
+  {title:"Before You Accuse Me",     notes:""},
+  {title:"Black Wind Big Blue",      notes:""},
+  {title:"Buffalo Springfield Again",notes:"Ryan & Matt duo"},
+  {title:"Crazy Mama",               notes:""},
+  {title:"Dandelion Queen",          notes:""},
+  {title:"Delays",                   notes:"David — B♭, note trail"},
+  {title:"Dimples",                  notes:""},
+  {title:"Done Somebody Wrong",      notes:""},
+  {title:"Fayetteville Hotline",     notes:""},
+  {title:"Feel More, Feel Less",     notes:""},
+  {title:"Graffiti Rose",            notes:""},
+  {title:"Hey Bulldog / Her Majesty",notes:""},
+  {title:"Highway Butterfly",        notes:""},
+  {title:"Hold That Bus",            notes:"Matt — standard tuning"},
+  {title:"Johnny B. Goode",          notes:""},
+  {title:"Les Brers",                notes:""},
+  {title:"Lose My Name",             notes:"Ryan — LV"},
+  {title:"Love in Vain",             notes:"slide — David walk down on bass on solo G to F"},
+  {title:"Luck Don't Last",          notes:""},
+  {title:"Oh Sweet Nothin'",         notes:""},
+  {title:"Out of Range",             notes:""},
+  {title:"Peace and Quiet",          notes:"B — David, standard tuning"},
+  {title:"Pick Up the Sun",          notes:""},
+  {title:"Playing by Your Rules",    notes:""},
+  {title:"Rock Me Baby",             notes:"B — slide, Matt solo then Ryan solo"},
+  {title:"Rumble",                   notes:""},
+  {title:"Save the Trouble",         notes:""},
+  {title:"She Loves Me to Death",    notes:""},
+  {title:"She's Real",               notes:""},
+  {title:"Sirens",                   notes:""},
+  {title:"Slightly Sexy",            notes:""},
+  {title:"Stormy Monday",            notes:""},
+  {title:"Time Goes Thru Me",        notes:""},
+  {title:"Time Will Tell",           notes:"C — David"},
+  {title:"Trail Dust",               notes:""},
+  {title:"Wine",                     notes:""},
+  {title:"You Gotta Move",           notes:"Ryan, Matt, Jake"},
+];
+
+// Bandcamp direct links for Thompson Springs originals
+const bandcampLinks = {
+  "Dandelion Queen":      "https://thompsonsprings.bandcamp.com/track/dandelion-queen",
+  "Graffiti Rose":        "https://thompsonsprings.bandcamp.com/track/graffiti-rose",
+  "Slightly Sexy":        "https://thompsonsprings.bandcamp.com/track/slightly-sexy",
+  "Fayetteville Hotline": "https://thompsonsprings.bandcamp.com/track/fayetteville-hotline",
+  "Save the Trouble":     "https://thompsonsprings.bandcamp.com/track/save-the-trouble",
+  "Time Goes Thru Me":    "https://thompsonsprings.bandcamp.com/track/time-goes-through-me",
+  "Highway Butterfly":    "https://thompsonsprings.bandcamp.com/track/highway-butterfly",
+  "Pick Up the Sun":      "https://thompsonsprings.bandcamp.com/track/pick-up-the-sun",
+  "Feel More, Feel Less": "https://thompsonsprings.bandcamp.com/track/feel-more-feel-less",
+  "Out of Range":         "https://thompsonsprings.bandcamp.com/track/out-of-range",
+  "All I Wanna Do":       "https://thompsonsprings.bandcamp.com/track/all-i-wanna-do",
+  "She Loves Me to Death":"https://thompsonsprings.bandcamp.com/track/she-loves-me-to-death-but-im-still-livin",
+  "Playing by Your Rules":"https://thompsonsprings.bandcamp.com/track/playing-by-your-rules",
+  "Trail Dust":           "https://thompsonsprings.bandcamp.com/track/trail-dust",
+};
+
+function enc(s) { return encodeURIComponent(s); }
+
+function getLinks(title) {
+  const bc = bandcampLinks[title] || null;
+  // For originals: search YouTube/Spotify with band name; for covers: just the song title
+  const isTS = !!bc || ["Sirens","Delays","Rumble","Time Will Tell","Hold That Bus",
+    "Black Wind Big Blue","Peace and Quiet","Luck Don't Last","Lose My Name","Les Brers"].includes(title);
+  const searchQ = isTS ? enc('Thompson Springs ' + title) : enc(title);
+  const yt  = 'https://www.youtube.com/results?search_query=' + searchQ;
+  const sp  = 'https://open.spotify.com/search/' + searchQ;
+  return { yt, sp, bc };
+}
+
+const songGrid = document.getElementById('song-grid');
+songs.forEach((s, i) => {
+  const { yt, sp, bc } = getLinks(s.title);
+  const div = document.createElement('div');
+  div.className = 'song-item';
+  div.innerHTML =
+    '<div class="song-title"><span class="song-num">' + (i+1) + '.</span>' + s.title + '</div>' +
+    (s.notes ? '<div class="song-notes">' + s.notes + '</div>' : '') +
+    '<div class="song-links">' +
+      '<a class="song-yt" href="' + yt + '" target="_blank" rel="noopener">▶ YT</a>' +
+      '<a class="song-yt" href="' + sp + '" target="_blank" rel="noopener">🎵 Spotify</a>' +
+      (bc ? '<a class="song-yt" href="' + bc + '" target="_blank" rel="noopener">🎸 Bandcamp</a>' : '') +
+    '</div>';
+  songGrid.appendChild(div);
+});
+
+const tourView = document.querySelector('.main-content');
+const songView = document.getElementById('song-view');
+const btnTour = document.getElementById('btn-tour');
+const btnSongs = document.getElementById('btn-songs');
+
+function switchView(view) {
+  if (view === 'tour') {
+    tourView.style.display = '';
+    songView.style.display = 'none';
+    btnTour.classList.add('active-view');
+    btnSongs.classList.remove('active-view');
+  } else {
+    tourView.style.display = 'none';
+    songView.style.display = 'block';
+    btnSongs.classList.add('active-view');
+    btnTour.classList.remove('active-view');
+  }
+}
+
+btnTour.addEventListener('click', (e) => { e.stopPropagation(); switchView('tour'); });
+btnSongs.addEventListener('click', (e) => { e.stopPropagation(); switchView('songs'); });
+
+// ── THEME DECORATIONS ──────────────────────────────────
+const decoEl = document.getElementById('theme-deco');
+
+const decos = {
+  default: `
+    <!-- Vintage asterisks / ornaments scattered -->
+    <svg width="100%" height="100%" viewBox="0 0 800 140" preserveAspectRatio="xMidYMid slice">
+      <text x="18" y="110" font-size="72" fill="#f6f1e9" opacity="0.18" font-family="serif">✦</text>
+      <text x="700" y="90" font-size="52" fill="#f6f1e9" opacity="0.14" font-family="serif">✦</text>
+      <text x="380" y="130" font-size="38" fill="#f6f1e9" opacity="0.12" font-family="serif">✶</text>
+      <!-- vintage border rules top/bottom -->
+      <line x1="0" y1="4" x2="800" y2="4" stroke="#d4a832" stroke-width="0.5" opacity="0.5"/>
+      <line x1="0" y1="8" x2="800" y2="8" stroke="#d4a832" stroke-width="2" opacity="0.35"/>
+      <line x1="0" y1="132" x2="800" y2="132" stroke="#d4a832" stroke-width="2" opacity="0.35"/>
+      <line x1="0" y1="136" x2="800" y2="136" stroke="#d4a832" stroke-width="0.5" opacity="0.5"/>
+      <!-- center ornament -->
+      <text x="50%" y="14" text-anchor="middle" font-size="10" fill="#d4a832" opacity="0.5" font-family="serif" letter-spacing="8">✦ EUROPEAN TOUR 2026 ✦</text>
+    </svg>`,
+
+  matt: `
+    <!-- Golf flags + subtle fairway lines -->
+    <svg width="100%" height="100%" viewBox="0 0 800 140" preserveAspectRatio="xMidYMid slice">
+      <!-- fairway lines -->
+      <ellipse cx="650" cy="130" rx="200" ry="30" fill="#276227" opacity="0.06"/>
+      <ellipse cx="100" cy="130" rx="140" ry="20" fill="#276227" opacity="0.05"/>
+      <!-- flag 1 -->
+      <g transform="translate(720,20)" opacity="0.45">
+        <line x1="0" y1="0" x2="0" y2="90" stroke="#276227" stroke-width="1.5"/>
+        <polygon points="0,0 28,10 0,20" fill="#e8cc50"/>
+        <circle cx="0" cy="90" r="4" fill="#276227"/>
+      </g>
+      <!-- flag 2 small -->
+      <g transform="translate(60,35)" opacity="0.3">
+        <line x1="0" y1="0" x2="0" y2="60" stroke="#276227" stroke-width="1"/>
+        <polygon points="0,0 18,7 0,14" fill="#e8cc50"/>
+        <circle cx="0" cy="60" r="3" fill="#276227"/>
+      </g>
+      <!-- Masters-style border -->
+      <rect x="2" y="2" width="796" height="136" fill="none" stroke="#276227" stroke-width="0.5" opacity="0.4"/>
+      <rect x="5" y="5" width="790" height="130" fill="none" stroke="#e8cc50" stroke-width="0.3" opacity="0.25"/>
+    </svg>`,
+
+  paert: `
+    <!-- Saturn, UFOs, stars, alien -->
+    <svg class="deco-planet" width="100%" height="100%" viewBox="0 0 800 140" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;">
+      <!-- stars -->
+      <circle cx="40" cy="20" r="1" fill="#e8bc60" opacity="0.7" style="animation:twinkle 2.1s ease-in-out infinite"/>
+      <circle cx="120" cy="50" r="0.8" fill="white" opacity="0.5" style="animation:twinkle 3.4s ease-in-out infinite;animation-delay:-1s"/>
+      <circle cx="200" cy="15" r="1.2" fill="white" opacity="0.6" style="animation:twinkle 2.8s ease-in-out infinite;animation-delay:-0.5s"/>
+      <circle cx="350" cy="30" r="0.7" fill="#e8bc60" opacity="0.5" style="animation:twinkle 4s ease-in-out infinite;animation-delay:-2s"/>
+      <circle cx="490" cy="12" r="1" fill="white" opacity="0.6" style="animation:twinkle 2.5s ease-in-out infinite;animation-delay:-1.5s"/>
+      <circle cx="580" cy="45" r="0.8" fill="white" opacity="0.4" style="animation:twinkle 3.1s ease-in-out infinite"/>
+      <circle cx="660" cy="25" r="1.1" fill="#e8bc60" opacity="0.6" style="animation:twinkle 2.7s ease-in-out infinite;animation-delay:-0.8s"/>
+      <circle cx="750" cy="55" r="0.9" fill="white" opacity="0.5" style="animation:twinkle 3.6s ease-in-out infinite;animation-delay:-1.2s"/>
+      <circle cx="770" cy="18" r="0.7" fill="white" opacity="0.4" style="animation:twinkle 2.3s ease-in-out infinite;animation-delay:-0.3s"/>
+      <circle cx="310" cy="60" r="0.6" fill="white" opacity="0.35" style="animation:twinkle 4.2s ease-in-out infinite;animation-delay:-3s"/>
+      <!-- Saturn (right side) -->
+      <g transform="translate(680,25)" opacity="0.85">
+        <ellipse cx="0" cy="0" rx="28" ry="28" fill="#e07840" opacity="0.7"/>
+        <ellipse cx="0" cy="0" rx="28" ry="28" fill="none" stroke="#e8bc60" stroke-width="0.5" opacity="0.4"/>
+        <!-- bands -->
+        <ellipse cx="0" cy="-5" rx="24" ry="5" fill="#c86830" opacity="0.4"/>
+        <ellipse cx="0" cy="5" rx="22" ry="4" fill="#d07840" opacity="0.3"/>
+        <!-- ring -->
+        <ellipse cx="0" cy="0" rx="46" ry="10" fill="none" stroke="#e8bc60" stroke-width="2.5" opacity="0.5"/>
+        <ellipse cx="0" cy="0" rx="52" ry="12" fill="none" stroke="#e07840" stroke-width="1" opacity="0.3"/>
+        <!-- ring occludes planet center -->
+        <ellipse cx="0" cy="0" rx="28" ry="6" fill="#0c0400" opacity="0.35"/>
+      </g>
+      <!-- small moon near saturn -->
+      <circle cx="742" cy="8" r="5" fill="#b88850" opacity="0.7"/>
+      <!-- UFO 1 (drifting, positioned via CSS animation) -->
+      <g class="deco-ufo" style="position:absolute;top:55%;left:-60px;">
+        <ellipse cx="0" cy="0" rx="22" ry="7" fill="#e8bc60" opacity="0.5"/>
+        <ellipse cx="0" cy="-5" rx="11" ry="7" fill="#e07840" opacity="0.4"/>
+        <ellipse cx="0" cy="0" rx="22" ry="7" fill="none" stroke="#e8bc60" stroke-width="0.8" opacity="0.6"/>
+        <circle cx="-8" cy="3" r="2" fill="#00ff88" opacity="0.6"/>
+        <circle cx="0" cy="3" r="2" fill="#ffff00" opacity="0.5"/>
+        <circle cx="8" cy="3" r="2" fill="#ff4444" opacity="0.5"/>
+      </g>
+      <!-- Alien silhouette (far right, small) -->
+      <g transform="translate(30,55)" opacity="0.55">
+        <ellipse cx="0" cy="-15" rx="10" ry="13" fill="#e8bc60"/>
+        <ellipse cx="-7" cy="-22" rx="3" ry="4" fill="#e8bc60"/>
+        <ellipse cx="7" cy="-22" rx="3" ry="4" fill="#e8bc60"/>
+        <ellipse cx="-4" cy="-18" rx="2" ry="2.5" fill="#0c0400"/>
+        <ellipse cx="4" cy="-18" rx="2" ry="2.5" fill="#0c0400"/>
+        <rect x="-6" y="-3" width="12" height="18" rx="3" fill="#e8bc60"/>
+        <line x1="-6" y1="5" x2="-14" y2="15" stroke="#e8bc60" stroke-width="2"/>
+        <line x1="6" y1="5" x2="14" y2="15" stroke="#e8bc60" stroke-width="2"/>
+        <line x1="-3" y1="15" x2="-5" y2="26" stroke="#e8bc60" stroke-width="2"/>
+        <line x1="3" y1="15" x2="5" y2="26" stroke="#e8bc60" stroke-width="2"/>
+      </g>
+      <!-- tiny planet (left) -->
+      <circle cx="155" cy="40" r="12" fill="#b06030" opacity="0.6"/>
+      <circle cx="155" cy="40" r="12" fill="none" stroke="#e07840" stroke-width="0.5" opacity="0.6"/>
+    </svg>`,
+
+  ryan: `
+    <!-- Wanted poster ornaments, sheriff star, cactus -->
+    <svg width="100%" height="100%" viewBox="0 0 800 140" preserveAspectRatio="xMidYMid slice">
+      <!-- wanted poster double border -->
+      <rect x="3" y="3" width="794" height="134" fill="none" stroke="#f0c040" stroke-width="1" opacity="0.5"/>
+      <rect x="7" y="7" width="786" height="126" fill="none" stroke="#f0c040" stroke-width="0.4" opacity="0.3"/>
+      <!-- corner ornaments -->
+      <text x="12" y="28" font-size="18" fill="#f0c040" opacity="0.5" font-family="serif">✦</text>
+      <text x="770" y="28" font-size="18" fill="#f0c040" opacity="0.5" font-family="serif">✦</text>
+      <text x="12" y="132" font-size="18" fill="#f0c040" opacity="0.5" font-family="serif">✦</text>
+      <text x="770" y="132" font-size="18" fill="#f0c040" opacity="0.5" font-family="serif">✦</text>
+      <!-- sheriff star (right) -->
+      <g transform="translate(730,70)" opacity="0.5">
+        <polygon points="0,-32 7,-10 30,-10 12,4 19,26 0,14 -19,26 -12,4 -30,-10 -7,-10" fill="#f0c040"/>
+        <polygon points="0,-20 4,-8 18,-8 8,1 11,14 0,7 -11,14 -8,1 -18,-8 -4,-8" fill="#1e40a0"/>
+        <circle cx="0" cy="0" r="5" fill="#f0c040"/>
+      </g>
+      <!-- cactus left -->
+      <g transform="translate(45,140)" opacity="0.35" fill="#1e40a0">
+        <rect x="-4" y="-70" width="8" height="70" rx="4"/>
+        <rect x="-16" y="-50" width="28" height="7" rx="3"/>
+        <rect x="-20" y="-57" width="8" height="20" rx="4"/>
+        <rect x="12" y="-40" width="8" height="18" rx="4"/>
+      </g>
+      <!-- cactus right small -->
+      <g transform="translate(760,140)" opacity="0.25" fill="#1e40a0">
+        <rect x="-3" y="-45" width="6" height="45" rx="3"/>
+        <rect x="-12" y="-30" width="20" height="5" rx="2"/>
+        <rect x="-15" y="-36" width="6" height="14" rx="3"/>
+      </g>
+      <!-- WANTED text watermark -->
+      <text x="50%" y="82" text-anchor="middle" font-size="64" fill="#f0c040" opacity="0.1" font-family="'Rye',serif" letter-spacing="4">WANTED</text>
+    </svg>`,
+
+  jake: `
+    <!-- Forest silhouettes, pine trees, elk antlers -->
+    <svg width="100%" height="100%" viewBox="0 0 800 140" preserveAspectRatio="xMidYMid slice">
+      <!-- mountain range silhouette -->
+      <polygon points="0,140 0,100 60,55 120,80 180,40 260,70 320,30 400,60 460,20 540,65 600,35 680,70 740,45 800,75 800,140" fill="#142008" opacity="0.55"/>
+      <!-- pine trees foreground -->
+      <g opacity="0.55" fill="#3c6820">
+        <!-- tree 1 -->
+        <polygon points="30,140 60,140 45,110"/>
+        <polygon points="33,118 57,118 45,92"/>
+        <polygon points="36,100 54,100 45,75"/>
+        <rect x="42" y="140" width="6" height="10" fill="#1e3010"/>
+        <!-- tree 2 small -->
+        <polygon points="730,140 755,140 742,118"/>
+        <polygon points="733,124 752,124 742,104"/>
+        <polygon points="736,110 749,110 742,90"/>
+        <rect x="739" y="140" width="5" height="8" fill="#1e3010"/>
+        <!-- tree 3 tiny far right -->
+        <polygon points="775,140 793,140 784,122"/>
+        <polygon points="777,128 791,128 784,112"/>
+        <rect x="781" y="140" width="4" height="7" fill="#1e3010"/>
+      </g>
+      <!-- elk antlers (center watermark) -->
+      <g transform="translate(400,95)" opacity="0.2" fill="#3c6820">
+        <ellipse cx="0" cy="-10" rx="8" ry="12"/>
+        <!-- left antler -->
+        <path d="M-5,-20 C-15,-40 -30,-45 -25,-60 C-20,-55 -18,-45 -10,-40 C-20,-50 -35,-65 -28,-78" stroke="#3c6820" stroke-width="3" fill="none" opacity="0.8"/>
+        <path d="M-18,-50 C-30,-55 -38,-50 -42,-40" stroke="#3c6820" stroke-width="2.5" fill="none"/>
+        <path d="M-22,-60 C-28,-70 -24,-80 -18,-82" stroke="#3c6820" stroke-width="2" fill="none"/>
+        <!-- right antler mirror -->
+        <path d="M5,-20 C15,-40 30,-45 25,-60 C20,-55 18,-45 10,-40 C20,-50 35,-65 28,-78" stroke="#3c6820" stroke-width="3" fill="none" opacity="0.8"/>
+        <path d="M18,-50 C30,-55 38,-50 42,-40" stroke="#3c6820" stroke-width="2.5" fill="none"/>
+        <path d="M22,-60 C28,-70 24,-80 18,-82" stroke="#3c6820" stroke-width="2" fill="none"/>
+      </g>
+      <!-- NPS-style border -->
+      <rect x="3" y="3" width="794" height="134" fill="none" stroke="#3c6820" stroke-width="1" opacity="0.4"/>
+    </svg>`,
+
+  david: `
+    <!-- Space invaders, pac-man ghost, pixel art -->
+    <svg width="100%" height="100%" viewBox="0 0 800 140" preserveAspectRatio="xMidYMid slice">
+      <!-- Space invader 1 (classic) -->
+      <g transform="translate(40,30)" opacity="0.55" fill="#00ff88">
+        <rect x="4" y="0" width="4" height="4"/><rect x="16" y="0" width="4" height="4"/>
+        <rect x="0" y="4" width="4" height="4"/><rect x="4" y="4" width="4" height="4"/><rect x="8" y="4" width="4" height="4"/><rect x="12" y="4" width="4" height="4"/><rect x="16" y="4" width="4" height="4"/><rect x="20" y="4" width="4" height="4"/>
+        <rect x="0" y="8" width="4" height="4"/><rect x="4" y="8" width="4" height="4"/><rect x="8" y="8" width="4" height="4"/><rect x="12" y="8" width="4" height="4"/><rect x="16" y="8" width="4" height="4"/><rect x="20" y="8" width="4" height="4"/>
+        <rect x="4" y="12" width="4" height="4"/><rect x="16" y="12" width="4" height="4"/>
+        <rect x="0" y="16" width="4" height="4"/><rect x="8" y="16" width="4" height="4"/><rect x="12" y="16" width="4" height="4"/><rect x="20" y="16" width="4" height="4"/>
+        <!-- eyes (dark) -->
+        <rect x="4" y="8" width="4" height="4" fill="#030d05"/><rect x="12" y="8" width="4" height="4" fill="#030d05"/>
+      </g>
+      <!-- Space invader 2 (smaller) -->
+      <g transform="translate(720,15) scale(0.7)" opacity="0.45" fill="#00ff88">
+        <rect x="4" y="0" width="4" height="4"/><rect x="16" y="0" width="4" height="4"/>
+        <rect x="0" y="4" width="4" height="4"/><rect x="4" y="4" width="4" height="4"/><rect x="8" y="4" width="4" height="4"/><rect x="12" y="4" width="4" height="4"/><rect x="16" y="4" width="4" height="4"/><rect x="20" y="4" width="4" height="4"/>
+        <rect x="0" y="8" width="4" height="4"/><rect x="8" y="8" width="4" height="4"/><rect x="12" y="8" width="4" height="4"/><rect x="20" y="8" width="4" height="4"/>
+        <rect x="0" y="16" width="4" height="4"/><rect x="20" y="16" width="4" height="4"/>
+      </g>
+      <!-- Space invader 3 tiny -->
+      <g transform="translate(380,85) scale(0.5)" opacity="0.35" fill="#00ff88">
+        <rect x="8" y="0" width="4" height="4"/>
+        <rect x="4" y="4" width="12" height="4"/>
+        <rect x="0" y="8" width="20" height="8"/>
+        <rect x="0" y="8" width="4" height="4" fill="#030d05"/>
+        <rect x="16" y="8" width="4" height="4" fill="#030d05"/>
+        <rect x="4" y="16" width="4" height="4"/><rect x="12" y="16" width="4" height="4"/>
+      </g>
+      <!-- Pac-Man ghost (right side) -->
+      <g transform="translate(660,25)" opacity="0.5" fill="#00ff88">
+        <path d="M0,40 L0,10 Q0,0 10,0 Q20,0 20,10 L20,40 Q17,34 14,40 Q11,34 8,40 Q5,34 2,40 Z"/>
+        <!-- eyes -->
+        <circle cx="6" cy="14" r="4" fill="#030d05"/>
+        <circle cx="14" cy="14" r="4" fill="#030d05"/>
+        <circle cx="7" cy="13" r="2" fill="#00ff88"/>
+        <circle cx="15" cy="13" r="2" fill="#00ff88"/>
+      </g>
+      <!-- scanline overlay -->
+      <rect x="0" y="0" width="800" height="140" fill="url(#scanlines)" opacity="0.06"/>
+      <defs>
+        <pattern id="scanlines" width="1" height="4" patternUnits="userSpaceOnUse">
+          <rect width="1" height="2" fill="#00ff88" opacity="0.4"/>
+        </pattern>
+      </defs>
+      <!-- pixel border -->
+      <rect x="0" y="0" width="800" height="4" fill="#00ff88" opacity="0.08"/>
+      <rect x="0" y="136" width="800" height="4" fill="#00ff88" opacity="0.08"/>
+    </svg>`,
+
+  cook: `
+    <!-- Guitar schematics, tube amp diagrams, circuit traces -->
+    <svg width="100%" height="100%" viewBox="0 0 800 140" preserveAspectRatio="xMidYMid slice">
+      <!-- schematic grid dots -->
+      <g opacity="0.3" fill="#c8881a">
+        <circle cx="40" cy="10" r="1"/><circle cx="40" cy="45" r="1"/><circle cx="40" cy="80" r="1"/><circle cx="40" cy="115" r="1"/><circle cx="120" cy="10" r="1"/><circle cx="120" cy="45" r="1"/><circle cx="120" cy="80" r="1"/><circle cx="120" cy="115" r="1"/><circle cx="200" cy="10" r="1"/><circle cx="200" cy="45" r="1"/><circle cx="200" cy="80" r="1"/><circle cx="200" cy="115" r="1"/><circle cx="280" cy="10" r="1"/><circle cx="280" cy="45" r="1"/><circle cx="280" cy="80" r="1"/><circle cx="280" cy="115" r="1"/><circle cx="360" cy="10" r="1"/><circle cx="360" cy="45" r="1"/><circle cx="360" cy="80" r="1"/><circle cx="360" cy="115" r="1"/><circle cx="440" cy="10" r="1"/><circle cx="440" cy="45" r="1"/><circle cx="440" cy="80" r="1"/><circle cx="440" cy="115" r="1"/><circle cx="520" cy="10" r="1"/><circle cx="520" cy="45" r="1"/><circle cx="520" cy="80" r="1"/><circle cx="520" cy="115" r="1"/><circle cx="600" cy="10" r="1"/><circle cx="600" cy="45" r="1"/><circle cx="600" cy="80" r="1"/><circle cx="600" cy="115" r="1"/><circle cx="680" cy="10" r="1"/><circle cx="680" cy="45" r="1"/><circle cx="680" cy="80" r="1"/><circle cx="680" cy="115" r="1"/><circle cx="760" cy="10" r="1"/><circle cx="760" cy="45" r="1"/><circle cx="760" cy="80" r="1"/><circle cx="760" cy="115" r="1"/>
+      </g>
+      <!-- Guitar body silhouette (left, large watermark) -->
+      <g transform="translate(35,75)" opacity="0.35" stroke="#c8881a" stroke-width="1" fill="none">
+        <!-- Strat-style body outline -->
+        <path d="M0,-55 C-8,-55 -22,-48 -26,-35 C-30,-22 -24,-8 -28,5 C-32,18 -40,28 -38,42 C-36,56 -20,62 -8,60 C4,58 10,48 16,48 C22,48 28,58 40,60 C52,62 68,56 70,42 C72,28 64,18 60,5 C56,-8 62,-22 58,-35 C54,-48 40,-55 32,-55 C24,-55 16,-48 0,-55 Z"/>
+        <!-- pickups -->
+        <rect x="-18" y="-15" width="36" height="12" rx="2"/>
+        <rect x="-18" y="5" width="36" height="12" rx="2"/>
+        <!-- pickup poles -->
+        <line x1="-14" y1="-9" x2="-14" y2="-9"/><circle cx="-14" cy="-9" r="1.5" fill="#c8881a"/>
+        <circle cx="-7" cy="-9" r="1.5" fill="#c8881a"/>
+        <circle cx="0" cy="-9" r="1.5" fill="#c8881a"/>
+        <circle cx="7" cy="-9" r="1.5" fill="#c8881a"/>
+        <circle cx="14" cy="-9" r="1.5" fill="#c8881a"/>
+        <circle cx="-14" cy="11" r="1.5" fill="#c8881a"/>
+        <circle cx="-7" cy="11" r="1.5" fill="#c8881a"/>
+        <circle cx="0" cy="11" r="1.5" fill="#c8881a"/>
+        <circle cx="7" cy="11" r="1.5" fill="#c8881a"/>
+        <circle cx="14" cy="11" r="1.5" fill="#c8881a"/>
+        <!-- bridge -->
+        <rect x="-20" y="30" width="40" height="8" rx="1"/>
+        <!-- volume knobs -->
+        <circle cx="32" cy="25" r="5"/>
+        <circle cx="42" cy="40" r="4"/>
+        <!-- neck -->
+        <rect x="-6" y="-55" width="12" height="0" rx="2"/>
+        <!-- jack -->
+        <circle cx="-35" cy="20" r="4"/>
+        <circle cx="-35" cy="20" r="2" fill="#c8881a" opacity="0.5"/>
+      </g>
+      <!-- Tube amp schematic (right side) -->
+      <g transform="translate(680,70)" opacity="0.4" stroke="#c8881a" stroke-width="0.8" fill="none">
+        <!-- amp chassis box -->
+        <rect x="-60" y="-50" width="120" height="85" rx="3"/>
+        <!-- tubes -->
+        <g stroke-width="0.8">
+          <ellipse cx="-35" cy="-28" rx="8" ry="14"/>
+          <ellipse cx="-35" cy="-28" rx="5" ry="10"/>
+          <line x1="-35" y1="-14" x2="-35" y2="-8"/>
+          <ellipse cx="0" cy="-28" rx="8" ry="14"/>
+          <ellipse cx="0" cy="-28" rx="5" ry="10"/>
+          <line x1="0" y1="-14" x2="0" y2="-8"/>
+          <ellipse cx="35" cy="-28" rx="8" ry="14"/>
+          <ellipse cx="35" cy="-28" rx="5" ry="10"/>
+          <line x1="35" y1="-14" x2="35" y2="-8"/>
+          <!-- tube glows -->
+          <circle cx="-35" cy="-28" r="3" fill="#c8881a" opacity="0.7" stroke="none"/>
+          <circle cx="0" cy="-28" r="3" fill="#c8881a" opacity="0.7" stroke="none"/>
+          <circle cx="35" cy="-28" r="3" fill="#c8881a" opacity="0.7" stroke="none"/>
+        </g>
+        <!-- knobs row -->
+        <circle cx="-40" cy="20" r="7"/>
+        <circle cx="-40" cy="20" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="-40" y1="13" x2="-40" y2="17" stroke="#c8881a" stroke-width="1.5"/>
+        <circle cx="-20" cy="20" r="7"/>
+        <circle cx="-20" cy="20" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="-20" y1="13" x2="-17" y2="16" stroke="#c8881a" stroke-width="1.5"/>
+        <circle cx="0" cy="20" r="7"/>
+        <circle cx="0" cy="20" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="0" y1="13" x2="3" y2="16" stroke="#c8881a" stroke-width="1.5"/>
+        <circle cx="20" cy="20" r="7"/>
+        <circle cx="20" cy="20" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="20" y1="13" x2="23" y2="16" stroke="#c8881a" stroke-width="1.5"/>
+        <circle cx="40" cy="20" r="7"/>
+        <circle cx="40" cy="20" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="40" y1="13" x2="37" y2="16" stroke="#c8881a" stroke-width="1.5"/>
+        <!-- VU meter -->
+        <rect x="-12" y="-8" width="24" height="14" rx="1"/>
+        <line x1="-9" y1="2" x2="-9" y2="-4"/>
+        <line x1="-6" y1="2" x2="-6" y2="-5"/>
+        <line x1="-3" y1="2" x2="-3" y2="-6"/>
+        <line x1="0" y1="2" x2="0" y2="-5"/>
+        <line x1="3" y1="2" x2="3" y2="-3"/>
+        <line x1="6" y1="2" x2="6" y2="-2"/>
+        <line x1="9" y1="2" x2="9" y2="-1"/>
+      </g>
+      <!-- Circuit traces (middle) -->
+      <g transform="translate(280,70)" opacity="0.3" stroke="#c8881a" stroke-width="0.8" fill="none">
+        <!-- resistor -->
+        <line x1="-60" y1="0" x2="-30" y2="0"/>
+        <rect x="-30" y="-6" width="24" height="12" rx="1"/>
+        <line x1="-6" y1="0" x2="20" y2="0"/>
+        <!-- capacitor -->
+        <line x1="20" y1="0" x2="35" y2="0"/>
+        <line x1="35" y1="-10" x2="35" y2="10"/>
+        <line x1="40" y1="-10" x2="40" y2="10"/>
+        <line x1="40" y1="0" x2="60" y2="0"/>
+        <!-- inductor coils -->
+        <line x1="-60" y1="25" x2="-45" y2="25"/>
+        <path d="M-45,25 Q-40,15 -35,25 Q-30,35 -25,25 Q-20,15 -15,25 Q-10,35 -5,25 Q0,15 5,25"/>
+        <line x1="5" y1="25" x2="20" y2="25"/>
+        <!-- ground symbols -->
+        <line x1="0" y1="0" x2="0" y2="15"/>
+        <line x1="-8" y1="15" x2="8" y2="15"/>
+        <line x1="-5" y1="19" x2="5" y2="19"/>
+        <line x1="-2" y1="23" x2="2" y2="23"/>
+        <!-- nodes -->
+        <circle cx="-60" cy="0" r="2" fill="#c8881a"/>
+        <circle cx="60" cy="0" r="2" fill="#c8881a"/>
+      </g>
+      <!-- Headstock silhouette top center -->
+      <g transform="translate(400,10)" opacity="0.3" stroke="#c8881a" stroke-width="1" fill="none">
+        <!-- Fender-style headstock -->
+        <path d="M-18,0 L-18,55 Q-18,65 -8,65 L8,65 Q18,65 18,55 L18,0 Z"/>
+        <!-- tuning pegs -->
+        <circle cx="-22" cy="10" r="5"/><circle cx="-22" cy="10" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="-18" y1="10" x2="-22" y2="10"/>
+        <circle cx="-22" cy="25" r="5"/><circle cx="-22" cy="25" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="-18" y1="25" x2="-22" y2="25"/>
+        <circle cx="-22" cy="40" r="5"/><circle cx="-22" cy="40" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="-18" y1="40" x2="-22" y2="40"/>
+        <circle cx="22" cy="10" r="5"/><circle cx="22" cy="10" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="18" y1="10" x2="22" y2="10"/>
+        <circle cx="22" cy="25" r="5"/><circle cx="22" cy="25" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="18" y1="25" x2="22" y2="25"/>
+        <circle cx="22" cy="40" r="5"/><circle cx="22" cy="40" r="2" fill="#c8881a" opacity="0.4" stroke="none"/>
+        <line x1="18" y1="40" x2="22" y2="40"/>
+        <!-- nut -->
+        <rect x="-18" y="58" width="36" height="5" rx="1" fill="#c8881a" opacity="0.15" stroke="#c8881a"/>
+        <!-- string lines -->
+        <line x1="-12" y1="0" x2="-12" y2="58" stroke-dasharray="2,2" opacity="0.5"/>
+        <line x1="-7" y1="0" x2="-7" y2="58" stroke-dasharray="2,2" opacity="0.5"/>
+        <line x1="-2" y1="0" x2="-2" y2="58" stroke-dasharray="2,2" opacity="0.5"/>
+        <line x1="3" y1="0" x2="3" y2="58" stroke-dasharray="2,2" opacity="0.5"/>
+        <line x1="8" y1="0" x2="8" y2="58" stroke-dasharray="2,2" opacity="0.5"/>
+        <line x1="13" y1="0" x2="13" y2="58" stroke-dasharray="2,2" opacity="0.5"/>
+      </g>
+    </svg>`,
+};
+
+function renderDeco(theme) {
+  decoEl.innerHTML = decos[theme] || '';
+}
+
+// Initial render
+renderDeco(document.documentElement.getAttribute('data-theme') || 'default');
+
+// Hook into theme switching (patch existing listener)
+themeOptions.forEach(btn => {
+  btn.addEventListener('click', () => {
+    renderDeco(btn.dataset.theme);
+  });
+});
+</script>
+</body>
+</html>
